@@ -22,7 +22,9 @@ services:
     container_name: gces_app
     env_file:
       - .env
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - 3000:3000
     volumes:
@@ -32,7 +34,19 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      
+    
+  gces_nginx:
+    container_name: gces_nginx
+    image: nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - gces_app_net
+    depends_on:
+      - app
+
 networks:
   gces_app_net:
     external: true
