@@ -20,8 +20,10 @@ services:
 
   app:
     container_name: gces_app
-    env_file:
-      - .env
+    # env_file:
+    #   - .env
+    environment:
+      DB_HOST: gces_postgres
     build:
       context: .
       dockerfile: Dockerfile
