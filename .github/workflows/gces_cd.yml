@@ -5,7 +5,13 @@ on:
     branches: [main]
 
 jobs:
+
+  gces_ci:
+    uses: Pedrok99/Trabalho-Individual-GCES-2021-2/.github/workflows/gces_ci.yml@main
+    
   push_image:
+    needs: gces_ci
+    
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -17,7 +23,8 @@ jobs:
 
       - name: Build image
         working-directory: ./aplicacao
-        run: docker build .
+        run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USER}}/gces:latest
 
       - name: Push image
-        run: docker push ${{secrets.DOCKER_USER}}/gces
+        working-directory: ./aplicacao
+        run: docker push ${{secrets.DOCKER_USER}}/gces:latest
